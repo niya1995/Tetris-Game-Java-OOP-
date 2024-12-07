@@ -62,9 +62,6 @@ public enum KeyAction {
 
 
 
-    private Clip clpMusicBackground; // background music
-    private Clip clpBomb; // noise for when bomb (black square piece) hits
-
 
     // ===============================================
     // ==CONSTRUCTOR
@@ -74,8 +71,7 @@ public enum KeyAction {
 
         gmpPanel = new GamePanel(DIM);
         gmpPanel.addKeyListener(this);
-        clpBomb = Sound.clipForLoopFactory("explosion-02.wav");
-        clpMusicBackground = Sound.clipForLoopFactory("tetris_tone_loop_1_.wav");
+        Sound.initializeSounds();
 
 
     }
@@ -175,10 +171,7 @@ public enum KeyAction {
         }
 		//once bomb hits the bottom, plays bomb noise, clears the board and adds to score
         else if (CommandCenter.getInstance().isPlaying() && gmpPanel.tetrCurrent instanceof Bomb) {
-            clpBomb.stop();
-            clpBomb.flush();
-            clpBomb.setFramePosition(0);
-            clpBomb.start();
+            Sound.playBombSound();
             gmpPanel.grid.clearGrid();
             CommandCenter.getInstance().addScore(1000);
             // sets high score
@@ -222,7 +215,7 @@ public enum KeyAction {
         }
 
         if (!bMuted)
-            clpMusicBackground.loop(Clip.LOOP_CONTINUOUSLY);
+            Sound.stopLoopingSounds();
     }
 
 
@@ -314,14 +307,17 @@ private void moveTetromino(Supplier<Tetromino> tetrominoSupplier, Consumer<Tetro
 }
 
 private void toggleMute() {
-    if (!bMuted) {
-        stopLoopingSounds(clpMusicBackground);
-        stopLoopingSounds(clpBomb);
+    bMuted = !bMuted; // Toggle the mute state
+    
+    if (bMuted) {
+        // If muted, stop all looping sounds
+        Sound.toggleMute(bMuted); // This will stop all sounds
     } else {
-        clpMusicBackground.loop(Clip.LOOP_CONTINUOUSLY);
+        // If unmuted, resume playing background music
+        Sound.playBackgroundMusic(bMuted); // This will start background music if not muted
     }
-    bMuted = !bMuted;
 }
+
 
 @Override
 public void keyReleased(KeyEvent e) {
