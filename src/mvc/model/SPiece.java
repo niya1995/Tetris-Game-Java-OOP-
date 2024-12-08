@@ -2,9 +2,7 @@ package mvc.model;
 
 import java.awt.*;
 
-/**
- * Created by jahnaariellegoldman on 5/25/16.
- */
+
 public class SPiece extends Tetromino {
     public SPiece() {
         super();

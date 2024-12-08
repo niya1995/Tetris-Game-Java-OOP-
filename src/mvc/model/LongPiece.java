@@ -2,9 +2,6 @@ package mvc.model;
 
 import java.awt.*;
 
-/**
- * Created by jahnaariellegoldman on 5/24/16.
- */
 public class LongPiece extends Tetromino {
 
     public LongPiece() {

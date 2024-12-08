@@ -8,15 +8,8 @@ import java.util.Random;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-// ===============================================
-// == This Game class is the CONTROLLER
-// ===============================================
 
 public class Game implements Runnable{
-
-    // ===============================================
-    // FIELDS
-    // ===============================================
 
     public static final Dimension DIM = new Dimension(500, 800); //the dimension of the game.
     public static final int THRESHOLD = 2400; // threshold to increase speed as score goes up
@@ -34,11 +27,6 @@ public class Game implements Runnable{
 
     private static Game instance = null;
 
-
-    // ===============================================
-    // ==CONSTRUCTOR
-    // ===============================================
-
     private Game() {
 
         gmpPanel = GamePanel.getInstance(DIM); // Pass the dimension to GamePanel's getInstance method
@@ -48,9 +36,6 @@ public class Game implements Runnable{
 
     }
 
-    // ===============================================
-    // ==METHODS
-    // ===============================================
     public static Game getInstance() {
         if (instance == null) {
             instance = new Game();

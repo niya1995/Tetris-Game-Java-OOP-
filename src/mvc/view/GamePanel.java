@@ -8,11 +8,8 @@ import javax.swing.*;
 
 public class GamePanel extends JPanel {
 
-    // ==============================================================
     // FIELDS
-    // ==============================================================
 
-    // The following "off" vars are used for the off-screen double-bufferred image.
     public Grid grid = new Grid();
     private GameFrame gmf;
     private Font fnt = new Font("SansSerif", Font.BOLD, 12);
@@ -51,10 +48,8 @@ public class GamePanel extends JPanel {
     }
 
 
-    // ==============================================================
     // METHODS
-    // ==============================================================
-
+    
     private void drawScore(Graphics g) {
         g.setColor(Color.white);
         g.setFont(fnt);

@@ -2,9 +2,7 @@ package mvc.model;
 
 import java.awt.*;
 
-/**
- * Created by jahnaariellegoldman on 6/3/16.
- */
+
 public class PlusPiece extends Tetromino {
     public PlusPiece() {
         super();

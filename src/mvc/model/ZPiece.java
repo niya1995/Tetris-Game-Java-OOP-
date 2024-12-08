@@ -2,9 +2,6 @@ package mvc.model;
 
 import java.awt.*;
 
-/**
- * Created by jahnaariellegoldman on 6/1/16.
- */
 public class ZPiece extends Tetromino {
     public ZPiece() {
         super();
