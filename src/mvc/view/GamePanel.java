@@ -23,13 +23,14 @@ public class GamePanel extends JPanel {
     private String strDisplay = "";
     public Tetromino tetrOnDeck;
     public Tetromino tetrCurrent;
+    private static GamePanel instance = null;
 
 
     // ==============================================================
     // CONSTRUCTOR
     // ==============================================================
 
-    public GamePanel(Dimension dim) {
+    private GamePanel(Dimension dim) {
         gmf = new GameFrame();
         gmf.getContentPane().add(this);
         gmf.pack();
@@ -40,6 +41,13 @@ public class GamePanel extends JPanel {
         gmf.setResizable(false);
         gmf.setVisible(true);
         this.setFocusable(true);
+        this.requestFocusInWindow();
+    }
+    public static GamePanel getInstance(Dimension dim) {
+        if (instance == null) {
+            instance = new GamePanel(dim); // Create the instance with the dimension parameter
+        }
+        return instance;
     }
 
 

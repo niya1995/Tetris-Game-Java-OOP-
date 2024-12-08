@@ -3,10 +3,7 @@ package mvc.controller;
 import mvc.model.*;
 import mvc.view.GamePanel;
 import sounds.Sound;
-import javax.sound.sampled.Clip;
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.util.Random;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -15,7 +12,7 @@ import java.util.function.Supplier;
 // == This Game class is the CONTROLLER
 // ===============================================
 
-public class Game implements Runnable, KeyListener {
+public class Game implements Runnable{
 
     // ===============================================
     // FIELDS
@@ -32,58 +29,39 @@ public class Game implements Runnable, KeyListener {
     private Thread thrAnim;
     private Thread thrAutoDown;
     private Thread thrLoaded;
-    private long lTime; // time stamp
-    private long lTimeStep;
     final static int PRESS_DELAY = 40; // avoid double pressing
     private boolean bMuted = true;
 
 
-    // Define an Enum for Key Mappings
-public enum KeyAction {
-    PAUSE(KeyEvent.VK_P),
-    QUIT(KeyEvent.VK_Q),
-    LEFT(KeyEvent.VK_LEFT),
-    RIGHT(KeyEvent.VK_RIGHT),
-    START(KeyEvent.VK_SPACE),
-    MUTE(KeyEvent.VK_M),
-    DOWN(KeyEvent.VK_DOWN),
-    UP(KeyEvent.VK_UP);
-
-    private final int keyCode;
-
-    KeyAction(int keyCode) {
-        this.keyCode = keyCode;
-    }
-
-    public int getKeyCode() {
-        return keyCode;
-    }
-}
-
-
+    private static Game instance = null;
 
 
     // ===============================================
     // ==CONSTRUCTOR
     // ===============================================
 
-    public Game() {
+    private Game() {
 
-        gmpPanel = new GamePanel(DIM);
-        gmpPanel.addKeyListener(this);
+        gmpPanel = GamePanel.getInstance(DIM); // Pass the dimension to GamePanel's getInstance method
+        GameKeyListener keyListener = new GameKeyListener(this, gmpPanel); // Pass Game and GamePanel to KeyListener
+        gmpPanel.addKeyListener(keyListener);
         Sound.initializeSounds();
-
 
     }
 
     // ===============================================
     // ==METHODS
     // ===============================================
-
+    public static Game getInstance() {
+        if (instance == null) {
+            instance = new Game();
+        }
+        return instance;
+    }
     public static void main(String args[]) {
         EventQueue.invokeLater(() -> {
             try {
-                Game game = new Game(); // construct itself
+                Game game = Game.getInstance(); // construct itself
                 game.fireUpThreads(); // Initialize and start the game threads
 
             } catch (Exception e) {
@@ -197,6 +175,10 @@ public enum KeyAction {
 
     }
 
+    public void gettryMovingDown() {
+        tryMovingDown();  // Calls the private tryMovingDown method internally
+    }
+
 
     // Called when user presses 'space'
     private void startGame() {
@@ -218,6 +200,10 @@ public enum KeyAction {
             Sound.stopLoopingSounds();
     }
 
+    public void triggerStartGame() {
+        startGame();  // Calls the private startGame method internally
+    }
+
 
     // creates the next tetromino from the different options available
     private Tetromino createNewTetromino() {
@@ -234,77 +220,19 @@ public enum KeyAction {
     }
     
 
-    // Varargs for stopping looping-music-clips
-    private static void stopLoopingSounds(Clip... clpClips) {
-        for (Clip clp : clpClips) {
-            clp.stop();
-        }
-    }
-
-    // ===============================================
-    // KEYLISTENER METHODS
-    // ===============================================
-
-    @Override
-public void keyPressed(KeyEvent e) {
-    lTime = System.currentTimeMillis();
-    int nKeyPressed = e.getKeyCode();
-
-    // Start game
-    if (nKeyPressed == KeyAction.START.getKeyCode() &&
-        CommandCenter.getInstance().isLoaded() &&
-        !CommandCenter.getInstance().isPlaying()) {
-        startGame();
-    }
-
-    // Pause game
-    if (nKeyPressed == KeyAction.PAUSE.getKeyCode() && lTime > lTimeStep + PRESS_DELAY) {
-        CommandCenter.getInstance().setPaused(!CommandCenter.getInstance().isPaused());
-        lTimeStep = System.currentTimeMillis();
-    }
-
-    // Quit game
-    if (nKeyPressed == KeyAction.QUIT.getKeyCode() && lTime > lTimeStep + PRESS_DELAY) {
-        System.exit(0);
-    }
-
-    // Move tetromino down
-    if (nKeyPressed == KeyAction.DOWN.getKeyCode() &&
-        lTime > lTimeStep + PRESS_DELAY - 35 &&
-        CommandCenter.getInstance().isPlaying()) {
-        tryMovingDown();
-        lTimeStep = System.currentTimeMillis();
-    }
-
-    // Move tetromino right
-    if (nKeyPressed == KeyAction.RIGHT.getKeyCode() && lTime > lTimeStep + PRESS_DELAY) {
-        moveTetromino(() -> gmpPanel.tetrCurrent.cloneTetromino(), Tetromino::moveRight);
-    }
-
-    // Move tetromino left
-    if (nKeyPressed == KeyAction.LEFT.getKeyCode() && lTime > lTimeStep + PRESS_DELAY) {
-        moveTetromino(() -> gmpPanel.tetrCurrent.cloneTetromino(), Tetromino::moveLeft);
-    }
-
-    // Rotate tetromino
-    if (nKeyPressed == KeyAction.UP.getKeyCode()) {
-        moveTetromino(() -> gmpPanel.tetrCurrent.cloneTetromino(), Tetromino::rotate);
-    }
-
-    // Mute/Unmute background music
-    if (nKeyPressed == KeyAction.MUTE.getKeyCode()) {
-        toggleMute();
-    }
-}
 
 private void moveTetromino(Supplier<Tetromino> tetrominoSupplier, Consumer<Tetromino> action) {
     Tetromino tetrTest = tetrominoSupplier.get();
     action.accept(tetrTest); // Test the action on the clone
     if (gmpPanel.grid.requestLateral(tetrTest)) {
         action.accept(gmpPanel.tetrCurrent); // Apply the action to the actual Tetromino
-        lTimeStep = System.currentTimeMillis(); // Update the time step
     }
 }
+
+public void tryMoveTetromino(Supplier<Tetromino> tetrominoSupplier, Consumer<Tetromino> action) {
+    moveTetromino(tetrominoSupplier, action);  // Call the private method
+}
+
 
 private void toggleMute() {
     bMuted = !bMuted; // Toggle the mute state
@@ -318,15 +246,8 @@ private void toggleMute() {
     }
 }
 
-
-@Override
-public void keyReleased(KeyEvent e) {
-    // No actions required for key release in this game
-}
-
-@Override
-public void keyTyped(KeyEvent e) {
-    // No actions required for key typing in this game
+public void gettoggleMute(){
+    toggleMute();
 }
 
 
