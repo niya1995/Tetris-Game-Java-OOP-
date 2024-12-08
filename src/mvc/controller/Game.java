@@ -30,7 +30,6 @@ public class Game implements Runnable{
     private Thread thrAutoDown;
     private Thread thrLoaded;
     final static int PRESS_DELAY = 40; // avoid double pressing
-    private boolean bMuted = true;
 
 
     private static Game instance = null;
@@ -196,7 +195,7 @@ public class Game implements Runnable{
             thrAutoDown.start();
         }
 
-        if (!bMuted)
+        if (!Sound.isMuted())
             Sound.stopLoopingSounds();
     }
 
@@ -231,23 +230,6 @@ private void moveTetromino(Supplier<Tetromino> tetrominoSupplier, Consumer<Tetro
 
 public void tryMoveTetromino(Supplier<Tetromino> tetrominoSupplier, Consumer<Tetromino> action) {
     moveTetromino(tetrominoSupplier, action);  // Call the private method
-}
-
-
-private void toggleMute() {
-    bMuted = !bMuted; // Toggle the mute state
-    
-    if (bMuted) {
-        // If muted, stop all looping sounds
-        Sound.toggleMute(bMuted); // This will stop all sounds
-    } else {
-        // If unmuted, resume playing background music
-        Sound.playBackgroundMusic(bMuted); // This will start background music if not muted
-    }
-}
-
-public void gettoggleMute(){
-    toggleMute();
 }
 
 

@@ -6,6 +6,10 @@ import javax.sound.sampled.*;
 public class Sound {
     private static Clip clpBomb;
     private static Clip clpMusicBackground;
+    private static boolean bMuted = true;
+    public static boolean isMuted() {
+        return bMuted;
+    }
 
     // Method to initialize and load the sounds
     public static void initializeSounds() {
@@ -59,12 +63,20 @@ public class Sound {
         }
     }
 
-    // Method to handle toggle mute functionality
-    public static void toggleMute(boolean isMuted) {
-        if (isMuted) {
+
+    private static void toggleMute() {
+        bMuted = !bMuted; // Toggle the mute state
+        
+        if (bMuted) {
+            // If muted, stop all looping sounds
             stopLoopingSounds(clpMusicBackground, clpBomb); // Stop all looping sounds
         } else {
+            // If unmuted, resume playing background music
             playBackgroundMusic(false);  // Play background music if not muted
         }
     }
+    public static void toggleMuteWrapper() {
+        toggleMute();  // Call the private method
+    }
+
 }

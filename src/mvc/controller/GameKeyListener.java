@@ -4,6 +4,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.HashMap;
 import java.util.Map;
+import sounds.Sound;
 
 import mvc.model.CommandCenter;
 import mvc.model.Tetromino;
@@ -112,8 +113,9 @@ public class GameKeyListener implements KeyListener {
 
         // Mute/Unmute background music
         if (nKeyPressed == KeyAction.MUTE.getKeyCode()) {
-            game.gettoggleMute();
+            Sound.toggleMuteWrapper();  // Call the public wrapper method
         }
+
     }
 
     @Override
