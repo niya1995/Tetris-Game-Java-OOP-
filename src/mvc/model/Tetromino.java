@@ -5,15 +5,15 @@ import mvc.controller.Game;
 import java.awt.*;
 
 
-public class Tetromino extends Movable {
+public class Tetromino implements Movable {
 
     public final static int ORIENTATION = 4;
     public final static int DIM = 4;
-    public int mRow;
-    public int mCol;
-    public int mOrientation;
-    public Color mColor;
-    public boolean[][][] mColoredSquares;
+    private int mRow;
+    private int mCol;
+    private int mOrientation;
+    private Color mColor;
+    private boolean[][][] mColoredSquares;
 
 
     public Tetromino() {
@@ -62,12 +62,9 @@ public class Tetromino extends Movable {
         this.mColor = color;
     }
 
-    public boolean[][][] getColoredSquares() {
-        return mColoredSquares;
-    }
 
-    public void setColoredSquares(boolean[][][] coloredSquares) {
-        this.mColoredSquares = coloredSquares;
+    public void setColoredSquare(int i, int x, int y, boolean value) {
+        mColoredSquares[i][x][y] = value;
     }
 
 
@@ -94,16 +91,19 @@ public class Tetromino extends Movable {
     }
 
     public boolean[][] getColoredSquares(int nOrientation) {
+        if (nOrientation < 0 || nOrientation >= ORIENTATION) {
+            throw new IllegalArgumentException("Invalid orientation index: " + nOrientation);
+        }
+    
         boolean[][] bC = new boolean[DIM][DIM];
         for (int i = 0; i < DIM; i++) {
             for (int j = 0; j < DIM; j++) {
                 bC[i][j] = mColoredSquares[nOrientation][i][j];
             }
-
         }
         return bC;
-
     }
+    
 
     public Tetromino cloneTetromino() {
         Tetromino tetr = new Tetromino();

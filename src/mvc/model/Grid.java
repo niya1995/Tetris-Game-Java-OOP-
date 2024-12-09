@@ -37,18 +37,15 @@ public class Grid {
 
     synchronized public boolean requestDown(Tetromino tetr) {
         boolean[][] bC;
-        bC = tetr.getColoredSquares(tetr.mOrientation);
-        for (int i = tetr.mCol; i < tetr.mCol + DIM; i++) {
-            for (int j = tetr.mRow; j < tetr.mRow + DIM; j++) {
+        bC = tetr.getColoredSquares(tetr.getOrientation());
+        for (int i = tetr.getCol(); i < tetr.getCol()  + DIM; i++) {
+            for (int j = tetr.getRow(); j < tetr.getRow() + DIM; j++) {
 //                if goes out of bounds
-                if (bC[j - tetr.mRow][i - tetr.mCol] && j >= Grid.ROWS) {
-                    return false;
+                if (bC[j - tetr.getRow()][i - tetr.getCol()]) {
+                    if (j >= Grid.ROWS || i < 0 || i >= Grid.COLS || mBlock[j][i].isOccupied()) {
+                        return false;
+                    }
                 }
-//                try to move into occupied block
-                if (bC[j - tetr.mRow][i - tetr.mCol] && mBlock[j][i].isOccupied()) {
-                    return false;
-                }
-
 
             }
 
@@ -59,11 +56,11 @@ public class Grid {
 
     synchronized public void addToOccupied(Tetromino tetr) {
         boolean[][] bC;
-        bC = tetr.getColoredSquares(tetr.mOrientation);
-        Color color = tetr.mColor;
-        for (int i = tetr.mCol; i < tetr.mCol + DIM; i++) {
-            for (int j = tetr.mRow; j < tetr.mRow + DIM; j++) {
-                if (bC[j - tetr.mRow][i - tetr.mCol]) {
+        bC = tetr.getColoredSquares(tetr.getOrientation());
+        Color color = tetr.getColor();
+        for (int i = tetr.getCol() ; i < tetr.getCol()  + DIM; i++) {
+            for (int j = tetr.getRow(); j < tetr.getRow() + DIM; j++) {
+                if (bC[j - tetr.getRow()][i - tetr.getCol() ]) {
                     mOccupiedBlocks.add(new Block(true, color, j, i));
                 }
 
@@ -153,8 +150,8 @@ public class Grid {
 
     synchronized public void setBlocks(Tetromino tetr) {
         boolean[][] bC;
-        bC = tetr.getColoredSquares(tetr.mOrientation);
-        Color clr = tetr.mColor;
+        bC = tetr.getColoredSquares(tetr.getOrientation());
+        Color clr = tetr.getColor();
 
 //        sets blocks to blue, unoccupied
         for (int i = 0; i < ROWS; i++) {
@@ -162,10 +159,10 @@ public class Grid {
                 mBlock[i][j] = new Block(false, Color.blue, i, j);
             }
         }
-        for (int i = tetr.mCol; i < tetr.mCol + DIM; i++) {
-            for (int j = tetr.mRow; j < tetr.mRow + DIM; j++) {
-                if (bC[j - tetr.mRow][i - tetr.mCol]) {
-                    mBlock[j][i] = new Block(false, clr, j - tetr.mRow, i - tetr.mCol);
+        for (int i = tetr.getCol() ; i < tetr.getCol()  + DIM; i++) {
+            for (int j = tetr.getRow(); j < tetr.getRow() + DIM; j++) {
+                if (bC[j - tetr.getRow()][i - tetr.getCol() ]) {
+                    mBlock[j][i] = new Block(false, clr, j - tetr.getRow(), i - tetr.getCol() );
                 }
 
             }
@@ -174,26 +171,24 @@ public class Grid {
 //occupied blocks
         for (Object mOccupiedBlock : mOccupiedBlocks) {
             Block b = (Block) mOccupiedBlock;
-            try {
+            if (b.getRow() >= 0 && b.getRow() < ROWS && b.getCol() >= 0 && b.getCol() < COLS) {
                 mBlock[b.getRow()][b.getCol()] = new Block(true, b.getColor(), b.getRow(), b.getCol());
-            } catch (NullPointerException e) {
-                break;
-
             }
+            
         }
     }
 
     synchronized public boolean requestLateral(Tetromino tetr) {
         boolean[][] bC;
-        bC = tetr.getColoredSquares(tetr.mOrientation);
-        for (int i = tetr.mCol; i < tetr.mCol + DIM; i++) {
-            for (int j = tetr.mRow; j < tetr.mRow + DIM; j++) {
-                if (bC[j - tetr.mRow][i - tetr.mCol] && (i < 0 || i >= Grid.COLS || j >= Grid.ROWS)) {
-                    return false;
+        bC = tetr.getColoredSquares(tetr.getOrientation());
+        for (int i = tetr.getCol() ; i < tetr.getCol()  + DIM; i++) {
+            for (int j = tetr.getRow(); j < tetr.getRow() + DIM; j++) {
+                if (bC[j - tetr.getRow()][i - tetr.getCol()]) {
+                    if (i < 0 || i >= Grid.COLS || j >= Grid.ROWS || mBlock[j][i].isOccupied()) {
+                        return false;
+                    }
                 }
-                if (bC[j - tetr.mRow][i - tetr.mCol] && mBlock[j][i].isOccupied()) {
-                    return false;
-                }
+                
 
             }
 

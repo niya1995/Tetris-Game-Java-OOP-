@@ -9,7 +9,7 @@ public class Bomb extends SquarePiece {
     public Bomb() {
         super();
         initialize();
-        mColor = Color.black;
+        setColor(Color.black);
     }
 
 
