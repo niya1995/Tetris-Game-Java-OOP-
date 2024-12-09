@@ -5,9 +5,7 @@ import java.awt.event.KeyListener;
 import java.util.HashMap;
 import java.util.Map;
 import sounds.Sound;
-
 import mvc.model.CommandCenter;
-import mvc.model.Tetromino;
 import mvc.view.GamePanel;
 
 public class GameKeyListener implements KeyListener {
@@ -96,19 +94,19 @@ public class GameKeyListener implements KeyListener {
             lTimeStep = System.currentTimeMillis();
         }
 
-        // Move tetromino right
+            // Move tetromino right
         if (nKeyPressed == KeyAction.RIGHT.getKeyCode() && lTime > lTimeStep + PRESS_DELAY) {
-            game.tryMoveTetromino(() -> gmpPanel.tetrCurrent.cloneTetromino(), Tetromino::moveRight);
+            game.tryMoveTetromino("moveRight");
         }
 
         // Move tetromino left
         if (nKeyPressed == KeyAction.LEFT.getKeyCode() && lTime > lTimeStep + PRESS_DELAY) {
-            game.tryMoveTetromino(() -> gmpPanel.tetrCurrent.cloneTetromino(), Tetromino::moveLeft);
+            game.tryMoveTetromino("moveLeft");
         }
 
         // Rotate tetromino
         if (nKeyPressed == KeyAction.UP.getKeyCode()) {
-            game.tryMoveTetromino(() -> gmpPanel.tetrCurrent.cloneTetromino(), Tetromino::rotate);
+            game.tryMoveTetromino("rotate");
         }
 
         // Mute/Unmute background music

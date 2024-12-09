@@ -5,8 +5,6 @@ import mvc.view.GamePanel;
 import sounds.Sound;
 import java.awt.*;
 import java.util.Random;
-import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 
 public class Game implements Runnable{
@@ -205,17 +203,34 @@ public class Game implements Runnable{
     
 
 
-private void moveTetromino(Supplier<Tetromino> tetrominoSupplier, Consumer<Tetromino> action) {
-    Tetromino tetrTest = tetrominoSupplier.get();
-    action.accept(tetrTest); // Test the action on the clone
-    if (gmpPanel.grid.requestLateral(tetrTest)) {
-        action.accept(gmpPanel.tetrCurrent); // Apply the action to the actual Tetromino
+    private void moveTetromino(Tetromino tetrTest, String actionType) {
+        // Perform action based on actionType, instead of passing a Consumer
+        if (actionType.equals("moveRight")) {
+            tetrTest.moveRight();  // Directly call the method on the clone
+        } else if (actionType.equals("moveLeft")) {
+            tetrTest.moveLeft();  // Directly call the method on the clone
+        } else if (actionType.equals("rotate")) {
+            tetrTest.rotate();  // Directly call the method on the clone
+        }
+    
+        // Now check if move is valid, if so, apply to the actual Tetromino
+        if (gmpPanel.grid.requestLateral(tetrTest)) {
+            if (actionType.equals("moveRight")) {
+                gmpPanel.tetrCurrent.moveRight();  // Apply the move to the actual Tetromino
+            } else if (actionType.equals("moveLeft")) {
+                gmpPanel.tetrCurrent.moveLeft();
+            } else if (actionType.equals("rotate")) {
+                gmpPanel.tetrCurrent.rotate();
+            }
+        }
     }
-}
+    
 
-public void tryMoveTetromino(Supplier<Tetromino> tetrominoSupplier, Consumer<Tetromino> action) {
-    moveTetromino(tetrominoSupplier, action);  // Call the private method
-}
+    public void tryMoveTetromino(String actionType) {
+        Tetromino tetrTest = gmpPanel.tetrCurrent.cloneTetromino();  // Clone the actual Tetromino
+        moveTetromino(tetrTest, actionType);  // Pass the cloned Tetromino and action type
+    }
+    
 
 
 }

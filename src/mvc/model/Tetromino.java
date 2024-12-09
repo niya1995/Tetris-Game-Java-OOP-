@@ -89,6 +89,15 @@ public class Tetromino implements Movable {
             mOrientation++;
         }
     }
+    public boolean[][][] getColoredSquaresForClone() {
+        return mColoredSquares;
+    }
+    public void setColoredSquaresForClone(boolean[][][] coloredSquares) {
+        this.mColoredSquares = coloredSquares;
+    }
+    
+    
+    
 
     public boolean[][] getColoredSquares(int nOrientation) {
         if (nOrientation < 0 || nOrientation >= ORIENTATION) {
