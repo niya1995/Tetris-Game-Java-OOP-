@@ -2,7 +2,7 @@ package mvc.model;
 
 import java.awt.*;
 
-public class LongPiece extends Tetromino {
+public class LongPiece extends Tetromino implements InterfaceTetromino{
 
     public LongPiece() {
         super();

@@ -12,14 +12,14 @@ public class GameFrame extends JFrame {
     public GameFrame() {
         enableEvents(AWTEvent.WINDOW_EVENT_MASK);
         try {
-            initialize();
+            setupWindow();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     //Component initialization
-    private void initialize() throws Exception {
+    private void setupWindow() throws Exception {
         contentPane = (JPanel) this.getContentPane();
         contentPane.setLayout(borderLayout1);
 

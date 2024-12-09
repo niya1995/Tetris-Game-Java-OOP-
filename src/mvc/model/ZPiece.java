@@ -2,7 +2,7 @@ package mvc.model;
 
 import java.awt.*;
 
-public class ZPiece extends Tetromino {
+public class ZPiece extends Tetromino implements InterfaceTetromino{
     public ZPiece() {
         super();
         initialize();

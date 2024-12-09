@@ -5,7 +5,7 @@ import mvc.controller.Game;
 import java.awt.*;
 
 
-public class Tetromino implements Movable {
+public class Tetromino extends Movable {
 
     public final static int ORIENTATION = 4;
     public final static int DIM = 4;

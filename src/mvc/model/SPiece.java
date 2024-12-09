@@ -3,7 +3,7 @@ package mvc.model;
 import java.awt.*;
 
 
-public class SPiece extends Tetromino {
+public class SPiece extends Tetromino implements InterfaceTetromino{
     public SPiece() {
         super();
         initialize();

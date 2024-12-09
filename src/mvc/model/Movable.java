@@ -1,15 +1,11 @@
 package mvc.model;
 
-public interface Movable {
+public abstract class Movable {
 
+    // Abstract methods for moving objects
+    public abstract void moveLeft();
+    public abstract void moveRight();
+    public abstract void moveDown();
+    public abstract void rotate();
 
-	//for the game to move movable objects
-	void moveLeft();
-	void moveRight();
-	void moveDown();
-	void rotate();
-
-
-
-
-} //end Movable
+} // End Movable
