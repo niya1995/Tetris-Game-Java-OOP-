@@ -114,15 +114,4 @@ public class Tetromino implements Movable {
     }
     
 
-    public Tetromino cloneTetromino() {
-        Tetromino tetr = new Tetromino();
-        tetr.mRow = mRow;
-        tetr.mCol = mCol;
-        tetr.mOrientation = mOrientation;
-        tetr.mColor = mColor;
-        tetr.mColoredSquares = mColoredSquares;
-
-        return tetr;
-    }
-
 }

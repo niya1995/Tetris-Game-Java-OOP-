@@ -22,6 +22,9 @@ public class Game implements Runnable{
     private Thread thrLoaded;
     final static int PRESS_DELAY = 40; // avoid double pressing
 
+    public Tetromino tetrCurrent;
+    public TetrominoCloner tetrominoCloner;
+
 
     private static Game instance = null;
 
@@ -31,6 +34,7 @@ public class Game implements Runnable{
         GameKeyListener keyListener = new GameKeyListener(this, gmpPanel); // Pass Game and GamePanel to KeyListener
         gmpPanel.addKeyListener(keyListener);
         Sound.initializeSounds();
+        tetrominoCloner = new TetrominoCloner();
 
     }
 
@@ -116,21 +120,21 @@ public class Game implements Runnable{
     } // end run
 
     private void updateGrid() {
-        gmpPanel.grid.setBlocks(gmpPanel.tetrCurrent);
+        gmpPanel.grid.setBlocks(tetrCurrent);
 
     }
 
 
     private void tryMovingDown() {
 		//uses a test tetromino to see if can move down in board
-        Tetromino tetrTest = gmpPanel.tetrCurrent.cloneTetromino();
+        Tetromino tetrTest = tetrominoCloner.cloneTetromino(tetrCurrent);;
         tetrTest.moveDown();
         if (gmpPanel.grid.requestDown(tetrTest)) {
-            gmpPanel.tetrCurrent.moveDown();
+            tetrCurrent.moveDown();
             tetrTest = null;
         }
 		//once bomb hits the bottom, plays bomb noise, clears the board and adds to score
-        else if (CommandCenter.getInstance().isPlaying() && gmpPanel.tetrCurrent instanceof Bomb) {
+        else if (CommandCenter.getInstance().isPlaying() && tetrCurrent instanceof Bomb) {
             Sound.playBombSound();
             gmpPanel.grid.clearGrid();
             CommandCenter.getInstance().addScore(1000);
@@ -138,17 +142,17 @@ public class Game implements Runnable{
             if (CommandCenter.getInstance().getHighScore() < CommandCenter.getInstance().getScore()) {
                 CommandCenter.getInstance().setHighScore(CommandCenter.getInstance().getScore());
             }
-            gmpPanel.tetrCurrent = gmpPanel.tetrOnDeck;
+            tetrCurrent = gmpPanel.tetrOnDeck;
             gmpPanel.tetrOnDeck = createNewTetromino();
             tetrTest = null;
         }
 //		once a tetromino hits the bottom, check if game is over (top row)
 //  check if any full rows completed, generate new tetromino for on deck, switch on deck to current
         else if (CommandCenter.getInstance().isPlaying()) {
-            gmpPanel.grid.addToOccupied(gmpPanel.tetrCurrent);
+            gmpPanel.grid.addToOccupied(tetrCurrent);
             gmpPanel.grid.checkTopRow();
             gmpPanel.grid.checkCompletedRow();
-            gmpPanel.tetrCurrent = gmpPanel.tetrOnDeck;
+            tetrCurrent = gmpPanel.tetrOnDeck;
             gmpPanel.tetrOnDeck = createNewTetromino();
             tetrTest = null;
         } else {
@@ -164,7 +168,7 @@ public class Game implements Runnable{
 
     // Called when user presses 'space'
     private void startGame() {
-        gmpPanel.tetrCurrent = createNewTetromino();
+        tetrCurrent = createNewTetromino();
         gmpPanel.tetrOnDeck = createNewTetromino();
 
         CommandCenter.getInstance().clearAll();
@@ -216,18 +220,18 @@ public class Game implements Runnable{
         // Now check if move is valid, if so, apply to the actual Tetromino
         if (gmpPanel.grid.requestLateral(tetrTest)) {
             if (actionType.equals("moveRight")) {
-                gmpPanel.tetrCurrent.moveRight();  // Apply the move to the actual Tetromino
+                tetrCurrent.moveRight();  // Apply the move to the actual Tetromino
             } else if (actionType.equals("moveLeft")) {
-                gmpPanel.tetrCurrent.moveLeft();
+                tetrCurrent.moveLeft();
             } else if (actionType.equals("rotate")) {
-                gmpPanel.tetrCurrent.rotate();
+                tetrCurrent.rotate();
             }
         }
     }
     
 
     public void tryMoveTetromino(String actionType) {
-        Tetromino tetrTest = gmpPanel.tetrCurrent.cloneTetromino();  // Clone the actual Tetromino
+        Tetromino tetrTest = tetrominoCloner.cloneTetromino(tetrCurrent);;  // Clone the actual Tetromino
         moveTetromino(tetrTest, actionType);  // Pass the cloned Tetromino and action type
     }
     
