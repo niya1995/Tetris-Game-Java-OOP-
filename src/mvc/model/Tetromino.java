@@ -63,7 +63,7 @@ public abstract class Tetromino implements Movable {
     }
 
 
-    public void setColoredSquare(int i, int x, int y, boolean value) {
+    public void setColoredSquares(int i, int x, int y, boolean value) {
         mColoredSquares[i][x][y] = value;
     }
 
@@ -89,10 +89,10 @@ public abstract class Tetromino implements Movable {
             mOrientation++;
         }
     }
-    public boolean[][][] getColoredSquaresForClone() {
+    public boolean[][][] getColoredSquares() {
         return mColoredSquares;
     }
-    public void setColoredSquaresForClone(boolean[][][] coloredSquares) {
+    public void setColoredSquares(boolean[][][] coloredSquares) {
         this.mColoredSquares = coloredSquares;
     }
     

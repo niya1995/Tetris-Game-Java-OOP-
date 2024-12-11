@@ -8,7 +8,7 @@ public class TetrominoCloner {
         cloned.setCol(original.getCol());
         cloned.setOrientation(original.getOrientation());
         cloned.setColor(original.getColor());
-        cloned.setColoredSquaresForClone(original.getColoredSquaresForClone());
+        cloned.setColoredSquares(original.getColoredSquares());
         return cloned;
     }
 }
