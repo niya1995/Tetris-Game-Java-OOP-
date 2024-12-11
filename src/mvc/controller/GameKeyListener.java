@@ -15,7 +15,6 @@ public class GameKeyListener implements KeyListener {
     final static int PRESS_DELAY = 40; // avoid double pressing
 
     private Game game; // Reference to the Game class
-    private GamePanel gmpPanel;
 
     // Constructor now expects both Game and GamePanel to be passed
     public GameKeyListener(Game game, GamePanel gmpPanel) {
@@ -23,7 +22,6 @@ public class GameKeyListener implements KeyListener {
             throw new IllegalArgumentException("Game or GamePanel cannot be null");
         }
         this.game = game;
-        this.gmpPanel = gmpPanel;
     }
 
     // Enum representing the key actions
