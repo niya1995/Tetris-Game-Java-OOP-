@@ -19,7 +19,6 @@ public class GamePanel extends JPanel {
     private int nFontHeight;
     private String strDisplay = "";
     public Tetromino tetrOnDeck;
-    public TetrominoCloner nextTetr;
     private static GamePanel instance = null;
 
 
