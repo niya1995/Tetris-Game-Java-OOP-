@@ -75,46 +75,65 @@ public class Game implements Runnable{
 
     // implements runnable - must have run method
     public void run() {
-
-        // lower this thread's priority; let the "main" aka 'Event Dispatch'
-        // thread do what it needs to do first
+        // Lower this thread's priority; let the main thread do what it needs to do first
         Thread.currentThread().setPriority(Thread.MIN_PRIORITY);
-
-        // and get the current time
-        long lStartTime = System.currentTimeMillis();
+    
+        // Get the current time
+        long startTime = System.currentTimeMillis();
+    
+        // Handle loading logic
+        loadGameIfNecessary(startTime);
+    
+        // Handle auto-down thread logic
+        handleAutoDownThread(startTime);
+    
+        // Handle animation thread logic
+        handleAnimationThread(startTime);
+    }
+    
+    private void loadGameIfNecessary(long startTime) {
         if (!CommandCenter.getInstance().isLoaded() && Thread.currentThread() == thrLoaded) {
             CommandCenter.getInstance().setLoaded(true);
         }
-
-        // thread animates the scene
+    }
+    
+    private void handleAutoDownThread(long startTime) {
         while (Thread.currentThread() == thrAutoDown) {
-            if (!CommandCenter.getInstance().isPaused() && CommandCenter.getInstance().isPlaying()) {
+            if (shouldProcessAutoDown()) {
                 tryMovingDown();
             }
             gmpPanel.repaint();
-            try {
-                lStartTime += nAutoDelay;
-                Thread.sleep(Math.max(0, lStartTime - System.currentTimeMillis()));
-            } catch (InterruptedException e) {
-                break;
-            }
+            sleepForNextFrame(startTime, nAutoDelay);
         }
-
+    }
+    
+    private void handleAnimationThread(long startTime) {
         while (Thread.currentThread() == thrAnim) {
-            if (!CommandCenter.getInstance().isPaused() && CommandCenter.getInstance().isPlaying()) {
+            if (shouldProcessAnimation()) {
                 updateGrid();
             }
             gmpPanel.repaint();
-            
-            try {
-                lStartTime += ANIM_DELAY;
-                Thread.sleep(Math.max(0, lStartTime - System.currentTimeMillis()));
-            } catch (InterruptedException e) {
-                // just skip this frame -- continue;
-                break;
-            }
-        } // end while
-    } // end run
+            sleepForNextFrame(startTime, ANIM_DELAY);
+        }
+    }
+    
+    private boolean shouldProcessAutoDown() {
+        return !CommandCenter.getInstance().isPaused() && CommandCenter.getInstance().isPlaying();
+    }
+    
+    private boolean shouldProcessAnimation() {
+        return !CommandCenter.getInstance().isPaused() && CommandCenter.getInstance().isPlaying();
+    }
+    
+    private void sleepForNextFrame(long startTime, long delay) {
+        try {
+            long elapsedTime = System.currentTimeMillis() - startTime;
+            long remainingTime = Math.max(0, delay - elapsedTime % delay); // Ensure sleep time is correct
+            Thread.sleep(remainingTime);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt(); // Handle interruption properly
+        }
+    }//end run
 
     private void updateGrid() {
         gmpPanel.grid.setBlocks(tetrCurrent);
