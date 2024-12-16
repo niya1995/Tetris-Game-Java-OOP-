@@ -1,24 +1,28 @@
 package mvc.model;
 
+import java.util.Objects;
+
 public class CollisionOp {
 
-    //this could also be a boolean, but we want to be explicit about what we're doing
+    // Enum Operation can stay as-is, but making it final is a good practice.
     public enum Operation {
         ADD, REMOVE
     }
 
-    //members
-    private Movable mMovable;
-    private Operation mOperation;
+    // Marking fields as final for immutability
+    private final Movable mMovable;
+    private final Operation mOperation;
 
-    //constructor
-    public CollisionOp(Movable movable, Operation op) {
-        mMovable = movable;
-        mOperation = op;
+    // Constructor: Validate inputs to ensure the object is always in a valid state.
+    public CollisionOp(Movable movable, Operation operation) {
+        if (movable == null || operation == null) {
+            throw new IllegalArgumentException("Movable and operation cannot be null");
+        }
+        this.mMovable = movable;
+        this.mOperation = operation;
     }
 
-
-    //getters
+    // Getters
     public Movable getMovable() {
         return mMovable;
     }
@@ -27,4 +31,23 @@ public class CollisionOp {
         return mOperation;
     }
 
+    // Override toString for better debugging output
+    @Override
+    public String toString() {
+        return "CollisionOp{movable=" + mMovable + ", operation=" + mOperation + '}';
+    }
+
+    // Override equals and hashCode for correct behavior in collections
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        CollisionOp that = (CollisionOp) obj;
+        return mMovable.equals(that.mMovable) && mOperation == that.mOperation;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(mMovable, mOperation);
+    }
 }

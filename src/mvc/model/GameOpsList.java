@@ -1,35 +1,32 @@
 package mvc.model;
 
-import java.util.LinkedList;
-import java.util.concurrent.locks.ReentrantLock;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
+public class GameOpsList {
 
-public class GameOpsList extends LinkedList <CollisionOp>{
-
-    private ReentrantLock lock;
+    // Use BlockingQueue instead of LinkedList
+    private final BlockingQueue<CollisionOp> queue;
 
     public GameOpsList() {
-        this.lock =   new ReentrantLock();
+        this.queue = new LinkedBlockingQueue<>();
     }
 
     public void enqueue(Movable mov, CollisionOp.Operation operation) {
-
-       try {
-            lock.lock();
-            addLast(new CollisionOp(mov, operation));
-        } finally {
-            lock.unlock();
+        // Add operation to the queue
+        try {
+            queue.put(new CollisionOp(mov, operation)); // Blocks if the queue is full
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt(); // Handle thread interruption
         }
     }
 
-
     public CollisionOp dequeue() {
         try {
-            lock.lock();
-           return (CollisionOp) super.removeFirst();
-        } finally {
-            lock.unlock();
+            return queue.take(); // Blocks if the queue is empty
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt(); // Handle thread interruption
+            return null; // Or handle the error accordingly
         }
-
     }
 }

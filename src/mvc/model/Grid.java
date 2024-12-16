@@ -89,63 +89,74 @@ public class Grid {
 
 
     synchronized public void checkCompletedRow() {
-        boolean rowCleared; // To track if any row was cleared in the current iteration.
+        boolean rowCleared;
         do {
-            rowCleared = false; // Reset flag at the start of each iteration.
-            LinkedList<Block> fullRowItems = new LinkedList<Block>();
-            LinkedList<Block> repositioningItems = new LinkedList<Block>();
-    
+            rowCleared = false;
             int nRows = Grid.ROWS - 1; // Start from the bottom row.
+    
             while (nRows >= 0) {
-                // Check if the row is full
-                for (int i = mOccupiedBlocks.size() - 1; i >= 0; i--) {
-                    Block block = mOccupiedBlocks.get(i);
-                    if (block.getRow() == nRows) {
-                        fullRowItems.add(block);
-                    }
-                }
+                LinkedList<Block> fullRowItems = getFullRowItems(nRows);
     
                 // If the row is full, clear it
                 if (fullRowItems.size() == Grid.COLS) {
                     rowCleared = true; // Indicate that a row was cleared.
     
-                    // Remove the blocks from the full row
-                    while (fullRowItems.size() > 0) {
-                        Block blck = fullRowItems.removeFirst();
-                        mOccupiedBlocks.remove(blck);
-                        CommandCenter.getInstance().addScore(blck.getPoints());
-                    }
+                    clearRow(fullRowItems); // Clear the row and update the score
+                    updateHighScore(); // Check and update high score if necessary
+                    CommandCenter.getInstance().checkThreshold(); // Check for difficulty increase
     
-                    // Update high score if necessary
-                    if (CommandCenter.getInstance().getScore() > CommandCenter.getInstance().getHighScore()) {
-                        CommandCenter.getInstance().setHighScore(CommandCenter.getInstance().getScore());
-                    }
-    
-                    // Check for difficulty increase if needed
-                    CommandCenter.getInstance().checkThreshold();
-    
-                    // Move blocks above the cleared row down
-                    for (int j = mOccupiedBlocks.size() - 1; j >= 0; j--) {
-                        Block blk = mOccupiedBlocks.get(j);
-                        if (blk.getRow() < nRows) {
-                            mOccupiedBlocks.remove(j);
-                            blk.setRow(blk.getRow() + 1);
-                            repositioningItems.add(blk);
-                        }
-                    }
-    
-                    // Add repositioned blocks back
-                    while (repositioningItems.size() > 0) {
-                        mOccupiedBlocks.add(repositioningItems.removeLast());
-                    }
+                    repositionBlocksAboveRow(nRows); // Move blocks above the cleared row down
                     break; // Exit the row-checking loop to recheck from the bottom.
                 } else {
-                    fullRowItems.clear();
                     nRows--;
                 }
             }
         } while (rowCleared); // Repeat until no rows are cleared in the iteration.
     }
+    
+    // Method to get the blocks that fill a specific row
+    private LinkedList<Block> getFullRowItems(int nRows) {
+        LinkedList<Block> fullRowItems = new LinkedList<Block>();
+        for (int i = mOccupiedBlocks.size() - 1; i >= 0; i--) {
+            Block block = mOccupiedBlocks.get(i);
+            if (block.getRow() == nRows) {
+                fullRowItems.add(block);
+            }
+        }
+        return fullRowItems;
+    }
+    
+    // Method to clear the row and update the score
+    private void clearRow(LinkedList<Block> fullRowItems) {
+        while (fullRowItems.size() > 0) {
+            Block blck = fullRowItems.removeFirst();
+            mOccupiedBlocks.remove(blck);
+        }
+        CommandCenter.getInstance().addScore(1000); // Add 1000 points for clearing the row
+    }
+    
+    // Method to update high score
+    private void updateHighScore() {
+        if (CommandCenter.getInstance().getScore() > CommandCenter.getInstance().getHighScore()) {
+            CommandCenter.getInstance().setHighScore(CommandCenter.getInstance().getScore());
+        }
+    }
+    
+    // Method to reposition blocks above the cleared row
+    private void repositionBlocksAboveRow(int nRows) {
+        LinkedList<Block> repositioningItems = new LinkedList<Block>();
+        for (int j = mOccupiedBlocks.size() - 1; j >= 0; j--) {
+            Block blk = mOccupiedBlocks.get(j);
+            if (blk.getRow() < nRows) {
+                mOccupiedBlocks.remove(j);
+                blk.setRow(blk.getRow() + 1);
+                repositioningItems.add(blk);
+            }
+        }
+        // Add repositioned blocks back in the correct order
+        mOccupiedBlocks.addAll(repositioningItems);
+    }
+    
     
 
     synchronized public void setBlocks(Tetromino tetr) {
