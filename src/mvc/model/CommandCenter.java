@@ -19,7 +19,7 @@ public class CommandCenter {
 
     // These ArrayLists with capacities set
     private List<Movable> movTetrominoes = new ArrayList<Movable>(300);
-    private GameOpsList opsList = new GameOpsList();
+    private GameOpsList<Movable> opsList = new GameOpsList<>();
 
 
     private static CommandCenter instance = null;
@@ -86,7 +86,7 @@ public class CommandCenter {
     }
 
 
-    public GameOpsList getOpsList() {
+    public GameOpsList<Movable> getOpsList() {
         return opsList;
     }
 
