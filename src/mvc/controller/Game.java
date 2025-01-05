@@ -302,7 +302,6 @@ public class Game implements Runnable{
         }
     }
 
-    
 
     public void tryMoveTetromino(String actionType) {
         Tetromino tetrTest = tetrominoCloner.cloneTetromino(tetrCurrent);;  // Clone the actual Tetromino

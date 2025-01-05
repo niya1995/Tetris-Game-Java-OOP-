@@ -36,125 +36,169 @@ public class Grid {
 
 
     synchronized public boolean requestDown(Tetromino tetr) {
-        boolean[][] bC;
-        bC = tetr.getColoredSquares(tetr.getOrientation());
-        for (int i = tetr.getCol(); i < tetr.getCol()  + DIM; i++) {
-            for (int j = tetr.getRow(); j < tetr.getRow() + DIM; j++) {
-//                if goes out of bounds
-                if (bC[j - tetr.getRow()][i - tetr.getCol()]) {
-                    if (j >= Grid.ROWS || i < 0 || i >= Grid.COLS || mBlock[j][i].isOccupied()) {
-                        return false;
+
+        try{
+            boolean[][] bC;
+            bC = tetr.getColoredSquares(tetr.getOrientation());
+            for (int i = tetr.getCol(); i < tetr.getCol()  + DIM; i++) {
+                for (int j = tetr.getRow(); j < tetr.getRow() + DIM; j++) {
+                    // if goes out of bounds
+                    if (bC[j - tetr.getRow()][i - tetr.getCol()]) {
+                        if (j >= Grid.ROWS || i < 0 || i >= Grid.COLS || mBlock[j][i].isOccupied()) {
+                            return false;
+                        }
                     }
+
                 }
 
             }
-
+        } catch (ArrayIndexOutOfBoundsException e) {
+            System.err.println("Error: Attempted to access grid out of bounds - " + e.getMessage());
+            return false;
+        }catch (Exception e) {
+            System.err.println("Unexpected error during requestDown: " + e.getMessage());
+            return false;
         }
-//        ok to move down
+    //ok to move down
         return true;
     }
 
     synchronized public void addToOccupied(Tetromino tetr) {
-        boolean[][] bC;
-        bC = tetr.getColoredSquares(tetr.getOrientation());
-        Color color = tetr.getColor();
-        for (int i = tetr.getCol() ; i < tetr.getCol()  + DIM; i++) {
-            for (int j = tetr.getRow(); j < tetr.getRow() + DIM; j++) {
-                if (bC[j - tetr.getRow()][i - tetr.getCol() ]) {
-                    mOccupiedBlocks.add(new Block(true, color, j, i));
+        try{
+            boolean[][] bC;
+            bC = tetr.getColoredSquares(tetr.getOrientation());
+            Color color = tetr.getColor();
+            for (int i = tetr.getCol() ; i < tetr.getCol()  + DIM; i++) {
+                for (int j = tetr.getRow(); j < tetr.getRow() + DIM; j++) {
+                    if (bC[j - tetr.getRow()][i - tetr.getCol() ]) {
+                        mOccupiedBlocks.add(new Block(true, color, j, i));
+                    }
+
                 }
 
             }
-
+        } catch (Exception e) {
+            System.err.println("Error adding Tetromino to occupied blocks: " + e.getMessage());
         }
     }
 
-    synchronized public void checkTopRow() {
-        for (Object mOccupiedBlock : mOccupiedBlocks) {
-            Block block = (Block) mOccupiedBlock;
-            if (block.getRow() <= 0) {
-//                game ends and clear board
-                CommandCenter.getInstance().setPlaying(false);
-                CommandCenter.getInstance().setGameOver(true);
-                clearGrid();
-            }
 
+    synchronized public void checkTopRow() {
+        try{
+            for (Object mOccupiedBlock : mOccupiedBlocks) {
+                Block block = (Block) mOccupiedBlock;
+                if (block.getRow() <= 0) {
+    //                game ends and clear board
+                    CommandCenter.getInstance().setPlaying(false);
+                    CommandCenter.getInstance().setGameOver(true);
+                    clearGrid();
+                }
+
+            }
+        } catch (Exception e) {
+            System.err.println("Error while checking the top row: " + e.getMessage());
         }
     }
 
     synchronized public void clearGrid() {
-        initializeBlocks();
-        mOccupiedBlocks.clear();
+        try{
+            initializeBlocks();
+            mOccupiedBlocks.clear();
+        } catch (Exception e) {
+            System.err.println("Error while clearing the grid: " + e.getMessage());
+        }
     }
 
 
     synchronized public void checkCompletedRow() {
-        boolean rowCleared;
-        do {
-            rowCleared = false;
-            int nRows = Grid.ROWS - 1; // Start from the bottom row.
-    
-            while (nRows >= 0) {
-                LinkedList<Block> fullRowItems = getFullRowItems(nRows);
-    
-                // If the row is full, clear it
-                if (fullRowItems.size() == Grid.COLS) {
-                    rowCleared = true; // Indicate that a row was cleared.
-    
-                    clearRow(fullRowItems); // Clear the row and update the score
-                    updateHighScore(); // Check and update high score if necessary
-                    CommandCenter.getInstance().checkThreshold(); // Check for difficulty increase
-    
-                    repositionBlocksAboveRow(nRows); // Move blocks above the cleared row down
-                    break; // Exit the row-checking loop to recheck from the bottom.
-                } else {
-                    nRows--;
+        try{
+            boolean rowCleared;
+            do {
+                rowCleared = false;
+                int nRows = Grid.ROWS - 1; // Start from the bottom row.
+        
+                while (nRows >= 0) {
+                    LinkedList<Block> fullRowItems = getFullRowItems(nRows);
+        
+                    // If the row is full, clear it
+                    if (fullRowItems.size() == Grid.COLS) {
+                        rowCleared = true; // Indicate that a row was cleared.
+        
+                        clearRow(fullRowItems); // Clear the row and update the score
+                        updateHighScore(); // Check and update high score if necessary
+                        CommandCenter.getInstance().checkThreshold(); // Check for difficulty increase
+        
+                        repositionBlocksAboveRow(nRows); // Move blocks above the cleared row down
+                        break; // Exit the row-checking loop to recheck from the bottom.
+                    } else {
+                        nRows--;
+                    }
                 }
-            }
-        } while (rowCleared); // Repeat until no rows are cleared in the iteration.
+            } while (rowCleared); // Repeat until no rows are cleared in the iteration.
+        }catch (Exception e) {
+            System.err.println("Error while checking completed rows: " + e.getMessage());
+        }
     }
     
     // Method to get the blocks that fill a specific row
     private LinkedList<Block> getFullRowItems(int nRows) {
         LinkedList<Block> fullRowItems = new LinkedList<Block>();
-        for (int i = mOccupiedBlocks.size() - 1; i >= 0; i--) {
-            Block block = mOccupiedBlocks.get(i);
-            if (block.getRow() == nRows) {
-                fullRowItems.add(block);
+        try{
+            for (int i = mOccupiedBlocks.size() - 1; i >= 0; i--) {
+                Block block = mOccupiedBlocks.get(i);
+                if (block.getRow() == nRows) {
+                    fullRowItems.add(block);
+                }
             }
+        }catch (Exception e) {
+            System.err.println("Error retrieving full row items: " + e.getMessage());
         }
         return fullRowItems;
     }
     
     // Method to clear the row and update the score
     private void clearRow(LinkedList<Block> fullRowItems) {
-        while (fullRowItems.size() > 0) {
-            Block blck = fullRowItems.removeFirst();
-            mOccupiedBlocks.remove(blck);
+        try{
+            while (fullRowItems.size() > 0) {
+                Block blck = fullRowItems.removeFirst();
+                mOccupiedBlocks.remove(blck);
+            }
+            CommandCenter.getInstance().addScore(1000); // Add 1000 points for clearing the row
+        }catch (Exception e) {
+            System.err.println("Error clearing row: " + e.getMessage());
         }
-        CommandCenter.getInstance().addScore(1000); // Add 1000 points for clearing the row
     }
     
     // Method to update high score
     private void updateHighScore() {
-        if (CommandCenter.getInstance().getScore() > CommandCenter.getInstance().getHighScore()) {
-            CommandCenter.getInstance().setHighScore(CommandCenter.getInstance().getScore());
+        try{
+            if (CommandCenter.getInstance().getScore() > CommandCenter.getInstance().getHighScore()) {
+                CommandCenter.getInstance().setHighScore(CommandCenter.getInstance().getScore());
+            }
+        }catch (NullPointerException e) {
+            System.err.println("Error: CommandCenter instance is null.");
+        }catch (Exception e) {
+            System.err.println("Error updating high score: " + e.getMessage());
         }
     }
     
     // Method to reposition blocks above the cleared row
     private void repositionBlocksAboveRow(int nRows) {
-        LinkedList<Block> repositioningItems = new LinkedList<Block>();
-        for (int j = mOccupiedBlocks.size() - 1; j >= 0; j--) {
-            Block blk = mOccupiedBlocks.get(j);
-            if (blk.getRow() < nRows) {
-                mOccupiedBlocks.remove(j);
-                blk.setRow(blk.getRow() + 1);
-                repositioningItems.add(blk);
+        try{
+            LinkedList<Block> repositioningItems = new LinkedList<Block>();
+            for (int j = mOccupiedBlocks.size() - 1; j >= 0; j--) {
+                Block blk = mOccupiedBlocks.get(j);
+                if (blk.getRow() < nRows) {
+                    mOccupiedBlocks.remove(j);
+                    blk.setRow(blk.getRow() + 1);
+                    repositioningItems.add(blk);
+                }
             }
+            // Add repositioned blocks back in the correct order
+            mOccupiedBlocks.addAll(repositioningItems);
+        }catch(Exception e){
+            System.err.println("Error repositioning blocks: " + e.getMessage());
         }
-        // Add repositioned blocks back in the correct order
-        mOccupiedBlocks.addAll(repositioningItems);
     }
     
     
