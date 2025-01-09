@@ -11,9 +11,9 @@ public class Grid {
     public static final int COLS = 10;
     public static final int DIM = 4;
 
-    Block[][] mBlock;
+    private Block[][] mBlock;
 
-    ArrayList<Block> mOccupiedBlocks;
+    private ArrayList<Block> mOccupiedBlocks;
 
     public Grid() {
         mBlock = new Block[ROWS][COLS];
@@ -26,7 +26,7 @@ public class Grid {
     }
 
     synchronized public void initializeBlocks() {
-//paints board with blue blocks
+        //paints board with blue blocks
         for (int i = 0; i < ROWS; i++) {
             for (int j = 0; j < COLS; j++) {
                 mBlock[i][j] = new Block(false, Color.blue, i, j);
@@ -84,21 +84,23 @@ public class Grid {
 
 
     synchronized public void checkTopRow() {
-        try{
-            for (Object mOccupiedBlock : mOccupiedBlocks) {
-                Block block = (Block) mOccupiedBlock;
+        try {
+            for (Block block : mOccupiedBlocks) {
                 if (block.getRow() <= 0) {
-    //                game ends and clear board
+                    // Game ends as soon as one block reaches or goes beyond the top row
                     CommandCenter.getInstance().setPlaying(false);
                     CommandCenter.getInstance().setGameOver(true);
                     clearGrid();
+                    
+                    System.out.println("Game Over! A block has reached the top row.");
+                    break;
                 }
-
             }
         } catch (Exception e) {
             System.err.println("Error while checking the top row: " + e.getMessage());
         }
     }
+    
 
     synchronized public void clearGrid() {
         try{
@@ -124,9 +126,9 @@ public class Grid {
                     if (fullRowItems.size() == Grid.COLS) {
                         rowCleared = true; // Indicate that a row was cleared.
         
-                        clearRow(fullRowItems); // Clear the row and update the score
-                        updateHighScore(); // Check and update high score if necessary
-                        CommandCenter.getInstance().checkThreshold(); // Check for difficulty increase
+                        clearRow(fullRowItems);
+                        updateHighScore(); 
+                        CommandCenter.getInstance().checkThreshold();
         
                         repositionBlocksAboveRow(nRows); // Move blocks above the cleared row down
                         break; // Exit the row-checking loop to recheck from the bottom.
@@ -163,7 +165,7 @@ public class Grid {
                 Block blck = fullRowItems.removeFirst();
                 mOccupiedBlocks.remove(blck);
             }
-            CommandCenter.getInstance().addScore(1000); // Add 1000 points for clearing the row
+            CommandCenter.getInstance().setRowClearScore();
         }catch (Exception e) {
             System.err.println("Error clearing row: " + e.getMessage());
         }
@@ -208,12 +210,10 @@ public class Grid {
         bC = tetr.getColoredSquares(tetr.getOrientation());
         Color clr = tetr.getColor();
 
-//        sets blocks to blue, unoccupied
-        for (int i = 0; i < ROWS; i++) {
-            for (int j = 0; j < COLS; j++) {
-                mBlock[i][j] = new Block(false, Color.blue, i, j);
-            }
-        }
+        //sets blocks to blue, unoccupied
+        initializeBlocks();
+
+        // part of the falling Tetromino
         for (int i = tetr.getCol() ; i < tetr.getCol()  + DIM; i++) {
             for (int j = tetr.getRow(); j < tetr.getRow() + DIM; j++) {
                 if (bC[j - tetr.getRow()][i - tetr.getCol() ]) {
@@ -223,16 +223,15 @@ public class Grid {
             }
 
         }
-//occupied blocks
-        for (Object mOccupiedBlock : mOccupiedBlocks) {
-            Block b = (Block) mOccupiedBlock;
+        //occupied blocks
+        for (Block b : mOccupiedBlocks) {
             if (b.getRow() >= 0 && b.getRow() < ROWS && b.getCol() >= 0 && b.getCol() < COLS) {
                 mBlock[b.getRow()][b.getCol()] = new Block(true, b.getColor(), b.getRow(), b.getCol());
             }
             
         }
     }
-
+    //left or right movement
     synchronized public boolean requestLateral(Tetromino tetr) {
         boolean[][] bC;
         bC = tetr.getColoredSquares(tetr.getOrientation());

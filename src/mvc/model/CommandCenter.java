@@ -2,8 +2,6 @@ package mvc.model;
 
 import mvc.controller.Game;
 
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class CommandCenter {
@@ -16,10 +14,8 @@ public class CommandCenter {
     private boolean mLoaded;
     private boolean mGameOver;
 
-
-    // These ArrayLists with capacities set
-    private List<Movable> movTetrominoes = new ArrayList<Movable>(300);
-    private GameOpsList<Movable> opsList = new GameOpsList<>();
+    private int rowClearScore = 1000;;
+    private int bombScore = 500;
 
 
     private static CommandCenter instance = null;
@@ -40,7 +36,7 @@ public class CommandCenter {
 
     public void initGame() {
         setScore(0);
-        setThreshold(2400);
+        setThreshold(2000);
 
     }
 
@@ -56,6 +52,14 @@ public class CommandCenter {
 
     public long getHighScore() {
         return mHighScore;
+    }
+
+    public void setRowClearScore() {
+        mScore += rowClearScore;
+    }
+
+    public void setbombScore() {
+        mScore += bombScore;
     }
 
     public void setHighScore(long lHighScore) {
@@ -80,20 +84,6 @@ public class CommandCenter {
         this.mGameOver = gameOver;
     }
 
-
-    public List<Movable> getMovTetromino() {
-        return movTetrominoes;
-    }
-
-
-    public GameOpsList<Movable> getOpsList() {
-        return opsList;
-    }
-
-
-    public void clearAll() {
-        movTetrominoes.clear();
-    }
 
     public boolean isPlaying() {
         return mPlaying;
@@ -126,9 +116,11 @@ public class CommandCenter {
 
     //	once the score gets above threshold, the game gets quicker
     public void checkThreshold() {
-        if (mScore > mThreshold && Game.nAutoDelay > 30) {
-            mThreshold += Game.THRESHOLD;
-            Game.nAutoDelay -= 15;
+        if (mScore >= mThreshold) {
+            if (Game.nAutoDelay > 30) { // minimum delay limit.
+                Game.nAutoDelay -= 50; // Increase speed by reducing the delay.
+            }
+            mThreshold += 2000;
         }
     }
 

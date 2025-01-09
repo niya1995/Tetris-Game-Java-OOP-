@@ -11,13 +11,12 @@ public class GamePanel extends JPanel {
     public Grid grid = new Grid();
     private GameFrame gmf;
     private TextFontManager textManager;
-    private Font fnt = new Font("SansSerif", Font.BOLD, 12);
-    private Font fntBig = new Font("SansSerif", Font.BOLD + Font.ITALIC, 36);
+    public Tetromino tetrOnDeck;
+    private static GamePanel instance = null;
+
     private FontMetrics fmt;
     private int nFontWidth;
     private int nFontHeight;
-    public Tetromino tetrOnDeck;
-    private static GamePanel instance = null;
 
     // ==============================================================
 
@@ -27,7 +26,7 @@ public class GamePanel extends JPanel {
         gmf.getContentPane().add(this);
 
         // Initialize TextFrontManager
-        textManager = new TextFontManager(fnt, fntBig);
+        textManager = new TextFontManager();
         initView();
 
         this.setFocusable(true);
@@ -107,7 +106,7 @@ public class GamePanel extends JPanel {
 
     private void initView() {
         Graphics g = getGraphics();
-        g.setFont(fnt);
+        g.setFont(textManager.fnt);
         fmt = g.getFontMetrics();
         nFontWidth = fmt.getMaxAdvance();
         nFontHeight = fmt.getHeight();

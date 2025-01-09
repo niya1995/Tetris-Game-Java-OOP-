@@ -12,8 +12,14 @@ public class Block {
     private Color mColor;
     private int mRow;
     private int mCol;
-    private static int POINTS = 100;
 
+    public Block(boolean bOccupied, Color color, int nRow, int nCol) {
+        mOccupied = bOccupied;
+        mColor = color;
+        mRow = nRow;
+        mCol = nCol;
+    }
+    
     public int getRow() {
         return mRow;
     }
@@ -38,15 +44,5 @@ public class Block {
         return mCol;
     }
 
-    public Block(boolean bOccupied, Color color, int nRow, int nCol) {
-        mOccupied = bOccupied;
-        mColor = color;
-        mRow = nRow;
-        mCol = nCol;
-    }
-
-    public int getPoints() {
-        return POINTS;
-    }
 
 }

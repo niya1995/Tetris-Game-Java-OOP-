@@ -3,11 +3,11 @@ package mvc.view;
 import java.awt.*;
 
 public class TextFontManager {
-    private Font fnt;
+    protected Font fnt = new Font("SansSerif", Font.BOLD, 12);
     private FontMetrics fmt;
 
-    public TextFontManager(Font defaultFont, Font largeFont) {
-        this.fnt = defaultFont;
+    public TextFontManager() {
+
     }
 
     // Initialize font metrics (called with Graphics context)

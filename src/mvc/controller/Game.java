@@ -10,7 +10,6 @@ import java.util.Random;
 public class Game implements Runnable{
 
     public static final Dimension DIM = new Dimension(500, 800); //the dimension of the game.
-    public static final int THRESHOLD = 2400; // threshold to increase speed as score goes up
     public static int nAutoDelay = 300; // how fast the tetrominoes come down
     public static final int TETROMINO_NUMBER = 100; // for tetromino probability of which comes next
     private GamePanel gmpPanel;
@@ -164,7 +163,7 @@ public class Game implements Runnable{
     private void handleBombTetromino() {
         Sound.playBombSound(); // Play bomb sound
         gmpPanel.grid.clearGrid(); // Clear the grid
-        CommandCenter.getInstance().addScore(500); // Add score for bomb
+        CommandCenter.getInstance().setbombScore(); // Add score for bomb
         updateHighScore(); // Update high score if necessary
         tetrCurrent = gmpPanel.tetrOnDeck; // Set current tetromino to on-deck piece
         gmpPanel.tetrOnDeck = createNewTetromino(); // Generate a new on-deck tetromino
@@ -209,7 +208,6 @@ public class Game implements Runnable{
 
     // Resets the game state through the CommandCenter
     private void resetGameState() {
-        CommandCenter.getInstance().clearAll();
         CommandCenter.getInstance().initGame();
         CommandCenter.getInstance().setPlaying(true);
         CommandCenter.getInstance().setPaused(false);

@@ -7,6 +7,8 @@ public class Sound {
     private static Clip clpBomb;
     private static Clip clpMusicBackground;
     private static boolean bMuted = true;
+
+    
     public static boolean isMuted() {
         return bMuted;
     }
