@@ -117,8 +117,8 @@ public class CommandCenter {
     //	once the score gets above threshold, the game gets quicker
     public void checkThreshold() {
         if (mScore >= mThreshold) {
-            if (Game.nAutoDelay > 30) { // minimum delay limit.
-                Game.nAutoDelay -= 50; // Increase speed by reducing the delay.
+            if (Game.getAutoDelay() > 30) { // minimum delay limit.
+                Game.setnAutoDelay(Game.getAutoDelay() - 50); // Increase speed by reducing the delay.
             }
             mThreshold += 2000;
         }

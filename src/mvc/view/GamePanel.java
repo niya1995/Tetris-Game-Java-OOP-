@@ -21,8 +21,8 @@ public class GamePanel extends JPanel {
     // ==============================================================
 
     // CONSTRUCTOR
-    private GamePanel(Dimension dim) {
-        gmf = new GameFrame(dim);
+    private GamePanel() {
+        gmf = new GameFrame();
         gmf.getContentPane().add(this);
 
         // Initialize TextFrontManager
@@ -33,9 +33,9 @@ public class GamePanel extends JPanel {
         this.requestFocusInWindow();
     }
 
-    public static GamePanel getInstance(Dimension dim) {
+    public static GamePanel getInstance() {
         if (instance == null) {
-            instance = new GamePanel(dim);
+            instance = new GamePanel();
         }
         return instance;
     }
@@ -73,8 +73,8 @@ public class GamePanel extends JPanel {
     }
 
     private void drawGamePlaying(Graphics2D g2d, Dimension d) {
-        int nBy = (d.height - 150) / Grid.ROWS;
-        int nBx = (d.width - 150) / Grid.COLS;
+        int nBy = (d.height - 150) / Grid.getRows();
+        int nBx = (d.width - 150) / Grid.getCols();
 
         Block[][] b = grid.getBlocks();
         for (int i = 0; i < b.length; i++) {
@@ -94,8 +94,8 @@ public class GamePanel extends JPanel {
     private void drawTetromino(Graphics2D g2d, int nBx, int nBy, Dimension d) {
         boolean[][] lts = tetrOnDeck.getColoredSquares(tetrOnDeck.getOrientation());
         Color c = tetrOnDeck.getColor();
-        for (int i = 0; i < Grid.DIM; i++) {
-            for (int j = 0; j < Grid.DIM; j++) {
+        for (int i = 0; i < Grid.getDim(); i++) {
+            for (int j = 0; j < Grid.getDim(); j++) {
                 if (lts[j][i]) {
                     g2d.setColor(c);
                     g2d.fill3DRect(i * nBx + 360, j * nBy + 150, nBx, nBy, true);

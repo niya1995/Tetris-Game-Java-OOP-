@@ -7,9 +7,9 @@ import java.util.LinkedList;
 
 public class Grid {
 
-    public static final int ROWS = 20;
-    public static final int COLS = 10;
-    public static final int DIM = 4;
+    private static final int ROWS = 20;
+    private static final int COLS = 10;
+    private static final int DIM = 4;
 
     private Block[][] mBlock;
 
@@ -32,6 +32,16 @@ public class Grid {
                 mBlock[i][j] = new Block(false, Color.blue, i, j);
             }
         }
+    }
+
+    public static int getRows(){
+        return ROWS;
+    }
+    public static int getCols(){
+        return COLS;
+    }
+    public static int getDim(){
+        return DIM;
     }
 
 

@@ -9,10 +9,9 @@ import java.util.Random;
 
 public class Game implements Runnable{
 
-    public static final Dimension DIM = new Dimension(500, 800); //the dimension of the game.
-    public static int nAutoDelay = 300; // how fast the tetrominoes come down
+    private static int nAutoDelay = 300; // how fast the tetrominoes come down
     public static final int TETROMINO_NUMBER = 100; // for tetromino probability of which comes next
-    private GamePanel gmpPanel;
+    private final GamePanel gmpPanel;
     public static Random R = new Random();
     public final static int ANIM_DELAY = 45; // milliseconds between screen updates (animation)
     //	threads for game play
@@ -24,14 +23,17 @@ public class Game implements Runnable{
     public Tetromino tetrCurrent;
     public TetrominoCloner tetrominoCloner;
 
+    private GameOpsList<String> gameOpsList; // String for operation types (moveRight, moveLeft, rotate, etc.)
 
     private static Game instance = null;
 
     private Game() {
 
-        gmpPanel = GamePanel.getInstance(DIM); // Pass the dimension to GamePanel's getInstance method
+        gmpPanel = GamePanel.getInstance(); // Pass the dimension to GamePanel's getInstance method
         GameKeyListener keyListener = new GameKeyListener(this, gmpPanel); // Pass Game and GamePanel to KeyListener
         gmpPanel.addKeyListener(keyListener);
+        gameOpsList = new GameOpsList<>();
+
         Sound.initializeSounds();
         tetrominoCloner = new TetrominoCloner();
 
@@ -122,6 +124,13 @@ public class Game implements Runnable{
     
     private boolean shouldProcessAnimation() {
         return !CommandCenter.getInstance().isPaused() && CommandCenter.getInstance().isPlaying();
+    }
+
+    public static void setnAutoDelay(int num){
+        nAutoDelay = num;
+    }
+    public static int getAutoDelay(){
+        return nAutoDelay;
     }
     
     private void sleepForNextFrame(long startTime, long delay) {

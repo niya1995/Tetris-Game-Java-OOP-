@@ -10,7 +10,7 @@ public class ZPiece extends Tetromino{
     }
 
     public void initialize() {
-        for (int i = 0; i < DIM; i++) {
+        for (int i = 0; i < Grid.getDim(); i++) {
             if (i == 0) {
                 setColoredSquares(i, 0, 0, false);
                 setColoredSquares(i, 0, 1, true);

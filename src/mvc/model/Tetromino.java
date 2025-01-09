@@ -7,8 +7,7 @@ import java.awt.*;
 
 public abstract class Tetromino implements Movable {
 
-    public final static int ORIENTATION = 4;
-    public final static int DIM = 4;
+    private final static int ORIENTATION = 4;
     private int mRow;
     private int mCol;
     private int mOrientation;
@@ -17,17 +16,13 @@ public abstract class Tetromino implements Movable {
 
 
     public Tetromino() {
-        mCol = Game.R.nextInt(Grid.COLS - DIM);  //by subtracting DIM from Grid.COLS, you ensure that the Tetromino can always fit within the board's width without spilling over the right edge.
+        mCol = Game.R.nextInt(Grid.getCols() - Grid.getDim());  //by subtracting DIM from Grid.COLS, you ensure that the Tetromino can always fit within the board's width without spilling over the right edge.
         mOrientation = Game.R.nextInt(ORIENTATION);
-        mColoredSquares = new boolean[ORIENTATION][DIM][DIM];    //DIM and ORIENTATION are constan
+        mColoredSquares = new boolean[ORIENTATION][Grid.getDim()][Grid.getDim()];    //DIM and ORIENTATION are constan
     }
 
     public static int getORIENTATION() {
         return ORIENTATION;
-    }
-
-    public static int getDIM() {
-        return DIM;
     }
 
     public int getRow() {
@@ -104,9 +99,9 @@ public abstract class Tetromino implements Movable {
             throw new IllegalArgumentException("Invalid orientation index: " + nOrientation);
         }
     
-        boolean[][] bC = new boolean[DIM][DIM];
-        for (int i = 0; i < DIM; i++) {
-            for (int j = 0; j < DIM; j++) {
+        boolean[][] bC = new boolean[Grid.getDim()][Grid.getDim()];
+        for (int i = 0; i < Grid.getDim(); i++) {
+            for (int j = 0; j < Grid.getDim(); j++) {
                 bC[i][j] = mColoredSquares[nOrientation][i][j];
             }
         }

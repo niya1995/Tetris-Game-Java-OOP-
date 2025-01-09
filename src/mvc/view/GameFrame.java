@@ -6,13 +6,15 @@ import java.awt.event.WindowEvent;
 
 public class GameFrame extends JFrame {
 
+    private static final Dimension DIM = new Dimension(500, 800);
+
     private JPanel contentPane;
     private BorderLayout borderLayout1 = new BorderLayout();
 
-    public GameFrame(Dimension dimension) {
+    public GameFrame() {
         enableEvents(AWTEvent.WINDOW_EVENT_MASK);
         try {
-            setupWindow(dimension);
+            setupWindow(DIM);
         } catch (Exception e) {
             e.printStackTrace();
         }
