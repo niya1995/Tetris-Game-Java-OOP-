@@ -38,7 +38,6 @@ public class GamePanel extends JPanel {
         return instance;
     }
 
-    // ==============================================================
 
     // METHODS
     public void paintComponent(Graphics g) {
@@ -56,7 +55,9 @@ public class GamePanel extends JPanel {
         // Handle game states
         if (CommandCenter.getInstance().isGameOver()) {
             textManager.displayGameOverText(g2d, d);
-        } else if (!CommandCenter.getInstance().isPlaying()) {          
+
+        } else if (!CommandCenter.getInstance().isPlaying()) { 
+
             if (!CommandCenter.getInstance().isLoaded()) {
                 textManager.displayLoadingSoundText(g2d, d);
             }else {
@@ -65,6 +66,7 @@ public class GamePanel extends JPanel {
             
         } else if (CommandCenter.getInstance().isPaused()) {
             textManager.displayPausedText(g2d, d);
+            
         } else {
             drawGamePlaying(g2d, d);
         }
@@ -75,32 +77,32 @@ public class GamePanel extends JPanel {
     }
 
     private void drawGamePlaying(Graphics2D g2d, Dimension d) {
-        int nBy = (d.height - 150) / Grid.getRows();
-        int nBx = (d.width - 150) / Grid.getCols();
+        int blockSizeY = (d.height - 150) / Grid.getRows();
+        int blockSizeX = (d.width - 150) / Grid.getCols();
 
-        Block[][] b = grid.getBlocks();
-        for (int i = 0; i < b.length; i++) {
-            for (int j = 0; j < b[0].length; j++) {
-                g2d.setColor(b[i][j].getColor());
-                g2d.fill3DRect(j * nBx, i * nBy + 150, nBx, nBy, true);
+        Block[][] blocks = grid.getBlocks();
+        for (int i = 0; i < blocks.length; i++) {
+            for (int j = 0; j < blocks[0].length; j++) {
+                g2d.setColor(blocks[i][j].getColor());
+                g2d.fill3DRect(j * blockSizeX, i * blockSizeY + 150, blockSizeX, blockSizeY, true);
             }
         }
 
         // Draw Tetromino
-        drawTetromino(g2d, nBx, nBy, d);
+        drawTetromino(g2d, blockSizeX, blockSizeY, d);
 
         // Draw score
         textManager.drawScore(g2d, (int) CommandCenter.getInstance().getScore(), (int)CommandCenter.getInstance().getHighScore(), nFontWidth, nFontHeight);
     }
 
-    private void drawTetromino(Graphics2D g2d, int nBx, int nBy, Dimension d) {
+    private void drawTetromino(Graphics2D g2d, int blockSizeX, int blockSizeY, Dimension d) {
         boolean[][] lts = tetrOnDeck.getColoredSquares(tetrOnDeck.getOrientation());
         Color c = tetrOnDeck.getColor();
         for (int i = 0; i < Grid.getDim(); i++) {
             for (int j = 0; j < Grid.getDim(); j++) {
                 if (lts[j][i]) {
                     g2d.setColor(c);
-                    g2d.fill3DRect(i * nBx + 360, j * nBy + 150, nBx, nBy, true);
+                    g2d.fill3DRect(i * blockSizeX + 360, j * blockSizeY + 150, blockSizeX, blockSizeY, true);
                 }
             }
         }

@@ -6,7 +6,7 @@ import java.awt.event.WindowEvent;
 
 public class GameFrame extends JFrame {
 
-    private static final Dimension DIM = new Dimension(500, 800);
+    private static final Dimension DIM = new Dimension(500, 750);
 
     private JPanel contentPane;
     private BorderLayout borderLayout1 = new BorderLayout();
@@ -29,6 +29,7 @@ public class GameFrame extends JFrame {
         this.setLocationRelativeTo(null);  // Center window
         this.setTitle("Tetris");
         this.setResizable(false);  // Fix window size
+        this.setAlwaysOnTop(true);
         this.setVisible(true);  // Make the window visible
     }
 
