@@ -3,7 +3,7 @@ package mvc.model;
 import java.awt.*;
 
 
- // bomb piece looks like a square piece, but is black in color and clears the board (500 points)
+ // bomb piece is a black square piece and it clears the board (500 points)
 
 public class Bomb extends SquarePiece {
     public Bomb() {
@@ -11,6 +11,5 @@ public class Bomb extends SquarePiece {
         initialize();
         setColor(Color.black);
     }
-
 
     }

@@ -6,9 +6,9 @@ import mvc.controller.Game;
 
 public class CommandCenter {
 
-    private long mHighScore;
+    private int mHighScore;
     private int mThreshold;
-    private long mScore;
+    private int mScore;
     private boolean mPlaying;
     private boolean mPaused;
     private boolean mLoaded;
@@ -23,6 +23,7 @@ public class CommandCenter {
 
     // Constructor made private - static Utility class only
     private CommandCenter() {
+        
     }
 
 
@@ -50,7 +51,7 @@ public class CommandCenter {
     }
 
 
-    public long getHighScore() {
+    public int getHighScore() {
         return mHighScore;
     }
 
@@ -62,7 +63,7 @@ public class CommandCenter {
         mScore += bombScore;
     }
 
-    public void setHighScore(long lHighScore) {
+    public void setHighScore(int lHighScore) {
         this.mHighScore = lHighScore;
     }
 
@@ -102,15 +103,15 @@ public class CommandCenter {
     }
 
 
-    public long getScore() {
+    public int getScore() {
         return mScore;
     }
 
-    public void setScore(long lParam) {
+    public void setScore(int lParam) {
         mScore = lParam;
     }
 
-    public void addScore(long lParam) {
+    public void addScore(int lParam) {
         mScore += lParam;
     }
 

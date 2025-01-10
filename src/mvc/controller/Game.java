@@ -57,9 +57,9 @@ public class Game implements Runnable{
     }
 
 
-    private void fireUpThreads() { // called initially
+    private void fireUpThreads() {
         if (thrAnim == null) {
-            thrAnim = new Thread(this, "AnimationThread"); // pass the the thread a runnable object (this)
+            thrAnim = new Thread(this, "AnimationThread"); 
             thrAnim.start();
         }
         if (thrAutoDown == null ) {
@@ -153,7 +153,8 @@ public class Game implements Runnable{
         return R;
     }
 
-    // Initializes the current and on-deck tetrominos
+    // Initializes the current and on-deck
+    // on-deck tetrominos mean next tetromino
     private void initializeTetrominos() {
         tetrCurrent = createNewTetromino();
         gmpPanel.tetrOnDeck = createNewTetromino();
@@ -253,7 +254,6 @@ public class Game implements Runnable{
     
     
     private void updateHighScore() {
-        // Update high score if necessary
         if (CommandCenter.getInstance().getHighScore() < CommandCenter.getInstance().getScore()) {
             CommandCenter.getInstance().setHighScore(CommandCenter.getInstance().getScore());
         }
@@ -261,12 +261,12 @@ public class Game implements Runnable{
     
 
     public void gettryMovingDown() {
-        tryMovingDown();  // Calls the private tryMovingDown method internally
+        tryMovingDown();
     }
 
 
     public void triggerStartGame() {
-        startGame();  // Calls the private startGame method internally
+        startGame();
     }
 
 
