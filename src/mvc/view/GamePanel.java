@@ -8,7 +8,7 @@ import javax.swing.*;
 public class GamePanel extends JPanel {
 
     // FIELDS
-    public Grid grid = new Grid();
+    private Grid grid = new Grid();
     private GameFrame gmf;
     private TextFontManager textManager;
     public Tetromino tetrOnDeck;
@@ -17,8 +17,6 @@ public class GamePanel extends JPanel {
     private FontMetrics fmt;
     private int nFontWidth;
     private int nFontHeight;
-
-    // ==============================================================
 
     // CONSTRUCTOR
     private GamePanel() {
@@ -70,6 +68,10 @@ public class GamePanel extends JPanel {
         } else {
             drawGamePlaying(g2d, d);
         }
+    }
+
+    public Grid getGridObj(){
+        return grid;
     }
 
     private void drawGamePlaying(Graphics2D g2d, Dimension d) {

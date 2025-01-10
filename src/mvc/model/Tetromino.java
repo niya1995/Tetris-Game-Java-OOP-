@@ -16,8 +16,8 @@ public abstract class Tetromino implements Movable {
 
 
     public Tetromino() {
-        mCol = Game.R.nextInt(Grid.getCols() - Grid.getDim());  //by subtracting DIM from Grid.COLS, you ensure that the Tetromino can always fit within the board's width without spilling over the right edge.
-        mOrientation = Game.R.nextInt(ORIENTATION);
+        mCol = Game.randInstance().nextInt(Grid.getCols() - Grid.getDim());  //by subtracting DIM from Grid.COLS, you ensure that the Tetromino can always fit within the board's width without spilling over the right edge.
+        mOrientation = Game.randInstance().nextInt(ORIENTATION);
         mColoredSquares = new boolean[ORIENTATION][Grid.getDim()][Grid.getDim()];    //DIM and ORIENTATION are constan
     }
 
