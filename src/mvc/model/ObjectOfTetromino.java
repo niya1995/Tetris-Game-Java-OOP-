@@ -2,7 +2,7 @@ package mvc.model;
 
 public class ObjectOfTetromino extends Tetromino{
 
-    public void initialize(){
+    protected void initialize(){
         //no body
     }
     

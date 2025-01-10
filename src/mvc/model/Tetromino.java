@@ -108,7 +108,7 @@ public abstract class Tetromino implements Movable {
         return bC;
     }
 
-    public abstract void initialize();
+    protected abstract void initialize();
     
 
 }

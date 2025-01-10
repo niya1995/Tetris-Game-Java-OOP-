@@ -11,7 +11,7 @@ public class JPiece extends Tetromino{
         
     }
 
-    public void initialize() {
+    protected void initialize() {
         for (int i = 0; i < Grid.getDim(); i++) {
             if (i == 0) {
                 setColoredSquares(i, 0, 0, false);

@@ -22,7 +22,7 @@ public class Game implements Runnable{
     private Tetromino tetrCurrent;
     private TetrominoCloner tetrominoCloner;
 
-    private final GameOpsList<String> gameOpsList; // String for operation types (moveRight, moveLeft, rotate, etc.)
+    private final GameOpsList<String> gameOpsList;
 
     private static Game instance = null;
 

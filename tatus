@@ -1,0 +1,21 @@
+[33m22b3ba6[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmaster[m[33m)[m integrate GameOpsList with game and GameKeyListener class
+[33mb2e8399[m small corrections
+[33mc64bb90[m small code readjustment and simplified the GameKeyLister class
+[33md408a41[m try to adjust access modifiers
+[33mff709e2[m total modification not include GameOpsList
+[33me9bdffb[m added exception handling to handle logical error on Grid
+[33mad68142[m adjust GameOpsList.java for Parametric Polymorphism
+[33mfee799f[m adject the run method in the Game class
+[33m55e2a36[m move the text from gamepanel to textfontmanager class and add abstraction
+[33m56926bb[m small correction remove gmpPanel from game.java contractor
+[33m40766a8[m samll correction regards to setColoredSquares and getColoredSquares
+[33m4300369[m make Tetromino class abstract and extend it with new class called ObjectOfTetromino
+[33mc2a9c4a[m Move Tetromino cloning logic from  Tetromino to TetrominoCloner class
+[33m2b8eb0f[m remove functional interface and lambda expression
+[33m28e3cc1[m make tetromino class private like mRow....
+[33m67288ba[m ADD interfaceTetromino and change movable interfce to abstract class
+[33m7ff49d7[m remove unnecessary comments
+[33mf61dfad[m move toggleMute method from Game to sound class
+[33m0943b7e[m split keyListner logic from Game class and call it GameKeyListener
+[33m92ed76f[m Move sound control methods from Game to Sound class
+[33m08a4aea[m base
