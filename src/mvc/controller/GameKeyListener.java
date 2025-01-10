@@ -4,6 +4,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import sounds.Sound;
 import mvc.model.CommandCenter;
+import mvc.model.GameOpsList;
 
 public class GameKeyListener implements KeyListener {
 
@@ -11,14 +12,12 @@ public class GameKeyListener implements KeyListener {
     private long lTimeStep;
     private final static int PRESS_DELAY = 40; // avoid double pressing
 
-    private Game game; // Reference to the Game class
+    private final GameOpsList<String> gameOpsList;
 
     // Constructor expects Game class
-    public GameKeyListener(Game game) {
-        if (game == null) {
-            throw new IllegalArgumentException("Game cannot be null");
-        }
-        this.game = game;
+    public GameKeyListener(GameOpsList<String> gameOpsList) {
+
+        this.gameOpsList = gameOpsList;
     }
 
     @Override
@@ -35,7 +34,7 @@ public class GameKeyListener implements KeyListener {
         if (nKeyPressed == KeyEvent.VK_SPACE && 
             CommandCenter.getInstance().isLoaded() &&
             !CommandCenter.getInstance().isPlaying()) {
-            game.triggerStartGame();
+            gameOpsList.enqueue("startGame");
         }
 
         // Pause game
@@ -53,23 +52,23 @@ public class GameKeyListener implements KeyListener {
         if (nKeyPressed == KeyEvent.VK_DOWN && 
             lTime > lTimeStep + PRESS_DELAY - 35 && 
             CommandCenter.getInstance().isPlaying()) {
-            game.gettryMovingDown();
+            gameOpsList.enqueue("movingDown");
             lTimeStep = System.currentTimeMillis();
         }
 
         // Move tetromino right
         if (nKeyPressed == KeyEvent.VK_RIGHT && lTime > lTimeStep + PRESS_DELAY) {
-            game.tryMoveTetromino("moveRight");
+            gameOpsList.enqueue("moveRight");
         }
 
         // Move tetromino left
         if (nKeyPressed == KeyEvent.VK_LEFT && lTime > lTimeStep + PRESS_DELAY) {
-            game.tryMoveTetromino("moveLeft");
+            gameOpsList.enqueue("moveLeft");
         }
 
         // Rotate tetromino
         if (nKeyPressed == KeyEvent.VK_UP) {
-            game.tryMoveTetromino("rotate");
+            gameOpsList.enqueue("rotate");
         }
 
         // Mute/Unmute background music

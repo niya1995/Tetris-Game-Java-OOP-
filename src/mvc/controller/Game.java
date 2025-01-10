@@ -22,16 +22,16 @@ public class Game implements Runnable{
     private Tetromino tetrCurrent;
     private TetrominoCloner tetrominoCloner;
 
-    private GameOpsList<String> gameOpsList; // String for operation types (moveRight, moveLeft, rotate, etc.)
+    private final GameOpsList<String> gameOpsList; // String for operation types (moveRight, moveLeft, rotate, etc.)
 
     private static Game instance = null;
 
     private Game() {
 
         gmpPanel = GamePanel.getInstance(); // Pass the dimension to GamePanel's getInstance method
-        GameKeyListener keyListener = new GameKeyListener(this); // Pass Game and GamePanel to KeyListener
+        gameOpsList = new GameOpsList<String>(this::processOperation);
+        GameKeyListener keyListener = new GameKeyListener(gameOpsList); // Pass Game and GamePanel to KeyListener
         gmpPanel.addKeyListener(keyListener);
-        gameOpsList = new GameOpsList<>();
 
         Sound.initializeSounds();
         tetrominoCloner = new TetrominoCloner();
@@ -188,6 +188,28 @@ public class Game implements Runnable{
         resetGameState();
         startAutoDownThread();
         stopLoopingSounds();
+    }
+
+    private void processOperation(String operation) {
+        switch (operation) {
+            case "startGame":
+                triggerStartGame();
+                break;
+            case "movingDown":
+                gettryMovingDown();
+                break;
+            case "moveRight":
+                tryMoveTetromino("moveRight");
+                break;
+            case "moveLeft":
+                tryMoveTetromino("moveLeft");
+                break;
+            case "rotate":
+                tryMoveTetromino("rotate");;
+                break;
+            default:
+                System.out.println("Unknown operation: " + operation);
+        }
     }
 
     
