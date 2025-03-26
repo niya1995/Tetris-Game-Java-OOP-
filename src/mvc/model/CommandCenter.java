@@ -20,13 +20,6 @@ public class CommandCenter {
 
     private static CommandCenter instance = null;
 
-
-    // Constructor made private - static Utility class only
-    private CommandCenter() {
-        
-    }
-
-
     public static CommandCenter getInstance() {
         if (instance == null) {
             instance = new CommandCenter();
@@ -119,9 +112,9 @@ public class CommandCenter {
     public void checkThreshold() {
         if (mScore >= mThreshold) {
             if (Game.getAutoDelay() > 30) { // minimum delay limit.
-                Game.setnAutoDelay(Game.getAutoDelay() - 50); // Increase speed by reducing the delay.
+                Game.setnAutoDelay(Game.getAutoDelay() - 25); // Increase speed by reducing the delay.
             }
-            mThreshold += 2000;
+            mThreshold += 1000;
         }
     }
 

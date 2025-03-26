@@ -238,6 +238,7 @@ public class Game implements Runnable{
         Sound.playBombSound(); // Play bomb sound
         gmpPanel.getGridObj().clearGrid(); // Clear the grid
         CommandCenter.getInstance().setbombScore(); // Add score for bomb
+        CommandCenter.getInstance().checkThreshold();
         updateHighScore(); // Update high score
         tetrCurrent = gmpPanel.tetrOnDeck; // Set current tetromino to on-deck piece
         gmpPanel.tetrOnDeck = createNewTetromino(); // Generate a new on-deck tetromino

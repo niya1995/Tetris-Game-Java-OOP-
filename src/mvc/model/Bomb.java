@@ -7,9 +7,6 @@ import java.awt.*;
 
 public class Bomb extends SquarePiece {
     public Bomb() {
-        super();
-        initialize();
         setColor(Color.black);
     }
-
     }
